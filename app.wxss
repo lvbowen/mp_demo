@@ -1,10 +1,225 @@
 /**app.wxss**/
+
 .container {
-  height: 100%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 200rpx 0;
-  box-sizing: border-box;
-} 
+  font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;
+}
+
+.fs24 {
+  font-size: 24rpx;
+}
+
+.fs26 {
+  font-size: 26rpx;
+}
+
+.fs28 {
+  font-size: 28rpx;
+}
+
+.fs30 {
+  font-size: 30rpx;
+}
+
+.fs32 {
+  font-size: 32rpx;
+}
+
+.fs34 {
+  font-size: 34rpx;
+}
+
+.c333 {
+  color: #333;
+}
+
+.c666 {
+  color: #333;
+}
+
+.c999 {
+  color: #333;
+}
+
+.c5CB3FF {
+  color: #5cb3ff;
+}
+
+.mt24 {
+  margin-top: 24rpx;
+}
+
+.mt-mb24 {
+  margin-top: 24rpx;
+  margin-bottom: 24rpx;
+}
+
+.pl24 {
+  padding-left: 24rpx;
+}
+
+.pl-pr24 {
+  padding-left: 24rpx;
+  padding-right: 24rpx;
+}
+
+.ell {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.multi-ell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.input-placeholder, .textarea-placeholder, .placeholder {
+  color: #999;
+}
+
+/* 去掉button默认样式 */
+
+.remove-button-default-style {
+  padding: 0;
+  margin: 0;
+  line-height: 1.5;
+  background: transparent;
+  text-align: left;
+  border-radius: 0;
+}
+
+.remove-button-default-style::after {
+  border: 0;
+}
+
+/* 扩展可点击区域  */
+
+.extend-clickable-area {
+  position: relative;
+}
+
+.extend-clickable-area::before {
+  content: '';
+  position: absolute;
+  top: -10rpx;
+  bottom: -10rpx;
+  left: -10rpx;
+  right: -10rpx;
+}
+
+/* 边框 适用单边或对应双边 */
+
+.border {
+  position: relative;
+}
+
+.border::before, .border::after {
+  content: " ";
+  position: absolute;
+  color: #999;
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+  -webkit-transform: scaleY(0.5);
+  transform: scaleY(0.5);
+}
+
+.border-top::before {
+  left: 0;
+  top: 0;
+  right: 0;
+  height: 1px;
+  border-top: 1rpx solid #999;
+}
+
+.border-bottom::after {
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 1px;
+  border-bottom: 1rpx solid #999;
+}
+
+.border-left::before {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 1px;
+  border-left: 1rpx solid #999;
+}
+
+.border-right::after {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  border-right: 1rpx solid #999;
+}
+
+/* 右箭头 */
+
+.arrow-right {
+  display: inline-block;
+  height: 6px;
+  width: 6px;
+  border-width: 2px 2px 0 0;
+  border-color: #c8c8cd;
+  border-style: solid;
+  -webkit-transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+  transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+  margin-left: 10rpx;
+}
+
+.navigator-arrow {
+  padding-right: 26rpx;
+  position: relative;
+}
+
+.navigator-arrow:after {
+  content: " ";
+  display: inline-block;
+  height: 18rpx;
+  width: 18rpx;
+  border-width: 2rpx 2rpx 0 0;
+  border-color: #888;
+  border-style: solid;
+  transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+  position: absolute;
+  top: 50%;
+  margin-top: -8rpx;
+  right: 28rpx;
+}
+
+/* css 十字形  */
+
+.icon-cross {
+  position: relative;
+  width: 36rpx;
+  height: 36rpx;
+  overflow: hidden;
+}
+
+.icon-cross::before {
+  content: "";
+  position: absolute;
+  top: 15rpx;
+  width: 100%;
+  height: 6rpx;
+  background-color: #666;
+}
+
+.icon-cross::after {
+  content: "";
+  position: absolute;
+  left: 15rpx;
+  width: 6rpx;
+  height: 100%;
+  background-color: #666;
+}

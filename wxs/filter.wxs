@@ -1,0 +1,45 @@
+
+/*  全局filter函数集合  */
+
+/**
+ * 切割字符串
+ * @param {String} str - 含逗号字符串
+ */
+function splitString(str){ 
+  if (str && typeof str == "string") {
+    return str.split(",")[1]
+  } else {
+    return str;
+  }
+}
+
+/**
+ * 时间戳转日期格式
+ * @param {number} timestamp - 时间戳
+ * return 日期 eg: 2018-01-01 12:12:12
+ */
+function timestampToDate(timestamp){
+  var date = getDate(timestamp)
+  return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()
+
+}
+
+/**
+ * 去掉字符串所有'-'
+ * @param {string} str 
+ */
+function replaceArea (str) {
+  if (str && typeof str == "string"){
+    var reg = getRegExp('-', 'g');  //wxs 要用getRegExp写正则
+    return str.replace(reg, '');
+  }else{
+    return str;
+  }
+}
+
+
+module.exports = {
+  splitString: splitString,
+  timestampToDate: timestampToDate,
+  replaceArea: replaceArea,
+}
