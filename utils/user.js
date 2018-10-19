@@ -49,18 +49,11 @@ let user = {
                     if (sessionId !== _data.data.sessionId) {     //不同则更新，后台设置5个小时过期
                       wx.setStorageSync('sessionId', _data.data.sessionId);
                     }
-                    // if (!getApp().globalData.userInfo){      //授权改成按钮触发的了，这个不需要了
-                    //   _this._authUserInfo(_data.data.quickSpFansId);
-                    // }else 
                     if(cb2){
                       cb2()
                     }                  
                     if(cb){
                       cb(_data.data)
-                    }
-                    //rpo管理员或hr扫码进入来关联身份
-                    if (getApp().globalData.rpoUserId){
-                      _this._saveAuthInfo(_data.data.sessionId);
                     }
                   }
                 }
@@ -156,21 +149,6 @@ let user = {
         callback && callback();
         _this._cb2 && _this._cb2(); 
       },
-    })
-  },
-  /**
-   * rpo管理员或hr扫码进入来关联身份
-   */
-  _saveAuthInfo(sessionId){
-    console.log('getApp().globalData.rpoUserId', getApp().globalData.rpoUserId)
-    network.post('/api.do', {
-      method: 'weiPinSp/saveAuthInfo',
-      param: JSON.stringify({
-        userId: getApp().globalData.rpoUserId,
-        sessionId: sessionId
-      })
-    }, (res2) => {
-      console.log('res2res2', res2)
     })
   },
   /**
