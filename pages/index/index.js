@@ -2,6 +2,7 @@
 //获取应用实例
 const app = getApp()
 const utils = require('../../utils/util.js')
+const apis = require('../../utils/api.js')
 
 Page({
   data: {
@@ -54,9 +55,27 @@ Page({
     })
   },
   init(){
-    let ns = utils.getNetwork((res)=>{
-      console.log('cb',res)
-    });
-    console.log('ns',ns)
+    
+    this.getCompanyList();
+    
+  },
+  getCompanyList(){
+    let method = 'weiPinSp/getCompanyList',
+        param = JSON.stringify({
+          companyinfoPid: '9170044',
+          keyWord: '',
+          auditStatus: 1,
+          showStatus: 1,
+          pageSize: 10,
+          pageNum: 1,
+          countPosition: 1  
+        }); 
+    apis.getCompanyList({ method, param}).then(res => {
+      console.log('res',res)
+    }).catch(err => {
+      console.log('err',err)
+    })
+
   }
+
 })
