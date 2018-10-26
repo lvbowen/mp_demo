@@ -17,7 +17,7 @@ let user = {
           apis.quickSpLogin({ code: response.code, sessionId: sessionId}).then((res) => {
              if(res.code == '0'){
                app.globalData.loginInfo = res.data;
-               if (sessionId !== res.data.sessionId) {     //不同则更新，后台设置5个小时过期，维护登录态，避免后台每次都调微信登录接口
+               if (sessionId !== res.data.sessionId) {   //不同则更新，后台设置5个小时过期，维护登录态，避免后台每次都调微信登录接口(有时取名为'token')
                  wx.setStorageSync('sessionId', res.data.sessionId);
                }
                cb && cb(res.data);

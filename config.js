@@ -10,6 +10,7 @@ var host = 'https://aijutong.com/hrm'   //测试
 var config = {
   host,
   appId: "wxe1b80f48618e9e63",
+  secretKey: 'zdW9Y2ZWEUZ-Jr8wuehrERPiITg-oGtjzpD6dfZv', //sign加密
   lversion: "1.0.0",
 
   // 上传文件接口
