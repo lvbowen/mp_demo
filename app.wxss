@@ -1,5 +1,8 @@
 /**app.wxss**/
 
+@import "style/weui.wxss";
+@import "style/ali-font.wxss";
+
 .container {
   min-height: 100%;
   display: flex;

@@ -52,7 +52,7 @@ Component({
           wx.showTabBar();
           this.triggerEvent('myevent');
         }
-        user._saveUserInfo(detail.userInfo, fansId, eniv, cb)
+        user.saveUserInfo(detail.userInfo, fansId, eniv, cb)
       }else{
         wx.showModal({
           title: '提示',

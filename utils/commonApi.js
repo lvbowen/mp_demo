@@ -1,7 +1,8 @@
 /* 全局公用接口 */
 
-let network = require('./network.js')
-let config = require('../config.js')
+const apis = require('./api.js')
+const config = require('../config.js')
+let app = getApp()
 
 
 /**
@@ -13,19 +14,18 @@ let config = require('../config.js')
 export function getSpFansPhone(e,success,cancel) {
   let getQuickSpFansPhone = (code)=>{
     if (e.detail.errMsg == "getPhoneNumber:ok") {
-      let globalData = getApp().globalData;
+      let _globalData = app.globalData;
       let params = {
         code: code,
-        quickSpFansId: globalData.fansId,
+        quickSpFansId: _globalData.fansId,
         iv: e.detail.iv,
         encryptedData: e.detail.encryptedData
       }
       console.log('params', params)
-      network.post('/weipin/getQuickSpFansPhone.do', params, (res) => {
-        console.log('getSpFansPhone', res)
+      apis.getPhone(params).then( res => {
         if (res.code == 0 && res.data.phone) {
-          globalData.phoneNumber = res.data.phone
-          globalData.fansId = res.data.id
+          _globalData.phoneNumber = res.data.phone
+          _globalData.fansId = res.data.id
           console.log('你的手机号是：' + res.data.phone)
           wx.showToast({
             title: '授权成功',
@@ -39,9 +39,9 @@ export function getSpFansPhone(e,success,cancel) {
               }
             },
           })
-        }else{
+        } else {
           wx.showToast({
-            icon:'none',
+            icon: 'none',
             title: '授权失败，请重试',
           })
         }
@@ -72,17 +72,16 @@ export function getSpFansPhone(e,success,cancel) {
  * 收集到的formId上报保存
  */
 export function saveFormId(obj,success,fail){
-  network.post('/weipin/saveFormid.do', {
-      quickSpFansId :getApp().globalData.fansId,
-      formid:obj.formId
-  }, (res) => {
-    console.log('saveFormid', res)
-    if(res.code == 0){     
-      if(success){
+  apis.saveFormId({
+    quickSpFansId: app.globalData.fansId,
+    formid: obj.formId
+  }).then(res => {
+    if (res.code == 0) {
+      if (success) {
         success()
       }
-    }else{
-      if(fail){
+    } else {
+      if (fail) {
         fail()
       }
     }
@@ -117,7 +116,7 @@ export function uploadImage(sType,success,fail){
       })
       //上传
       wx.uploadFile({
-        url: config.host + '/weixin/uploadImg.do',
+        url: config.uploadFileUrl,
         filePath: tempFilePaths[0],
         name: 'imageFile',
         header: {
@@ -149,19 +148,7 @@ export function uploadImage(sType,success,fail){
   })
 }
 
-/**
- * 获取未读消息总数
- */
-export function getAllNotReadCount(success,fail){
-  network.post('/weipinDirectChat/getAllNotReadCount.do',{
-    receiverFansId: getApp().globalData.fansId
-  },(res) => {
-    if(res.code == 0){
-      success && success(res.data)
-    }
-  })
-}
-
+//保存图片到系统相册
 export function saveImage(filePath, cb){
   wx.saveImageToPhotosAlbum({
     filePath: filePath,

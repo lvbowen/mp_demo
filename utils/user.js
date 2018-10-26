@@ -30,55 +30,22 @@ let user = {
     })
   },
   /**
-   * 授权用户信息
-   */
-  _authUserInfo(fansId){
-    let _this = this;
-    wx.getUserInfo({
-      withCredentials:true,
-      success: response => {
-        // 允许授权，保存用户信息
-        let eniv = {
-          en: response.encryptedData,
-          iv: response.iv
-        }
-        _this._saveUserInfo(response.userInfo, fansId, eniv);
-      },
-      fail:(err)=>{
-        _this._cb2 && _this._cb2();
-        wx.navigateTo({
-          url: '/pages/generation/authorize/authorize',
-        })
-      }
-    })
-  },
-  /**
    * 保存用户信息
    */
-  _saveUserInfo(userInfo, fansId, eniv, callback){
+  saveUserInfo(userInfo, fansId, eniv, callback){
     let _this = this;
     let _userInfo = Object.assign({},userInfo, { id: fansId })
     wx.setStorageSync('userInfo', userInfo);
-    wx.request({
-      url: config.host + '/weipin/saveQuickSpFans.do',
-      method: "POST",
-      header: {
-        "lversion": `${config.lversion}`,
-        "content-type": "application/x-www-form-urlencoded"
-      },
-      data: {
-        userInfo: JSON.stringify(_userInfo),
-        encryptedData: eniv.en,
-        iv: eniv.iv,
-        sessionId: wx.getStorageSync('sessionId')
-      },
-      success: function (res) {
-        if(res.data.code == '0'){
-          getApp().globalData.userInfo = userInfo
-        }
-        callback && callback();
-        _this._cb2 && _this._cb2(); 
-      },
+    apis.saveUserInfo({
+      userInfo: JSON.stringify(_userInfo),
+      encryptedData: eniv.en,
+      iv: eniv.iv,
+      sessionId: wx.getStorageSync('sessionId')
+    }).then((res) => {
+      if (res.code == '0') {
+        app.globalData.userInfo = userInfo
+      }
+      callback && callback();
     })
   },
   /**
