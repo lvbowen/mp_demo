@@ -1,63 +1,30 @@
 
+const app = getApp()
 const config = require("../config.js")
-const network = require('./network.js')
 const apis = require('./api.js')
 
 let user = {
   _cb:null,
-  _cb2:null,
   // 登录
-  login: function (cb,cb2) {
+  login: function (cb) {
     this._cb = cb;
-    this._cb2 = cb2;
     let _this = this;
-    let _globalData;
-    if (getApp()){
-      _globalData = getApp().globalData;
-    }
-    let sessionId = wx.getStorageSync("sessionId");
+    let sessionId = wx.getStorageSync("sessionId") || '';
     wx.login({
       success: response => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         if (response.code) {
-              wx.request({
-                url: config.host + '/weipin/quickSpLogin.do',
-                method: "POST",
-                header: {
-                  "lversion": `${config.lversion}`,
-                  "content-type": "application/x-www-form-urlencoded"
-                },
-                data: {
-                  code: response.code,
-                  sessionId: sessionId
-                },
-                success: function (res) {
-                  let _data = res.data
-                  if (_data.code == "0") {
-                    _globalData.fansId = _data.data.quickSpFansId;
-                    if (_data.data.companyinfoPid){
-                      _globalData.companyId = _data.data.companyId;
-                      _globalData.companyinfoPid = _data.data.companyinfoPid;
-                      _globalData.companyType = _data.data.companyType;
-                    }
-
-                    console.log('quickSpLogin', _data.data)
-                    if (_data.data.isSystemUser == 1 && !_globalData.hrUser){
-                      //第一次手机注册或登录后，下次直接登录
-                      _globalData.hrUser = { companyinfoId: _data.data.companyinfoId, loginPhone: _data.data.loginPhone}
-                    }
-                    if (sessionId !== _data.data.sessionId) {     //不同则更新，后台设置5个小时过期
-                      wx.setStorageSync('sessionId', _data.data.sessionId);
-                    }
-                    if(cb2){
-                      cb2()
-                    }                  
-                    if(cb){
-                      cb(_data.data)
-                    }
-                  }
-                }
-              })
+          apis.quickSpLogin({ code: response.code, sessionId: sessionId}).then((res) => {
+             if(res.code == '0'){
+               app.globalData.loginInfo = res.data;
+               if (sessionId !== res.data.sessionId) {     //不同则更新，后台设置5个小时过期，维护登录态，避免后台每次都调微信登录接口
+                 wx.setStorageSync('sessionId', res.data.sessionId);
+               }
+               cb && cb(res.data);
+             }else{
+               console.log('登录失败')
+             }
+          })
         }
       }
     })
@@ -82,43 +49,6 @@ let user = {
         wx.navigateTo({
           url: '/pages/generation/authorize/authorize',
         })
-        //拒绝授权
-        // wx.showModal({
-        //   title: '提示',
-        //   content: '您拒绝了授权,小程序部分功能将无法正常使用。如需正常，请按确定并在【设置】页面中授权用户信息',
-        //   success: function (res) {
-        //     if (res.confirm) {
-        //        wx.openSetting({
-        //          success: (res) => {
-        //            if (res.authSetting['scope.userInfo']) {                  
-        //              setTimeout(() => {   //增加延时确保授权已生效                     
-        //                wx.getUserInfo({
-        //                  success:(res2) => {
-        //                    //保存用户信息
-        //                    _this._saveUserInfo(res2.userInfo, fansId)
-        //                  }
-        //                })
-        //              }, 100)
-        //            } else {
-        //              if (_this._cb2) {
-        //                _this._cb2()
-        //              } 
-        //              console.log('未允许授权用户信息')
-        //            }
-        //          },
-        //          fail:()=>{
-        //            if (_this._cb2) {
-        //              _this._cb2()
-        //            } 
-        //          }
-        //        })          
-        //     } else if (res.cancel) {
-        //       if(_this._cb2){
-        //         _this._cb2()
-        //       }          
-        //     }
-        //   }
-        // });
       }
     })
   },

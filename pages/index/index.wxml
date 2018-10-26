@@ -9,6 +9,7 @@
   </view>
   <view class="usermotto">
     <text class="user-motto">{{motto}}</text>
+    <navigator url="../logs/logs">日志</navigator>
   </view>
   <view class="multi-ell" style="width:200rpx;">阿加莎肯定就分开ask地方就卡死ask的积分卡就是将卡上的f</view>
 </view>

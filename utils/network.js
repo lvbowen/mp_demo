@@ -1,5 +1,4 @@
 let config = require("../config.js")
-let utils = require("./util.js")
 let md5 = require("./md5.min.js")
 
 const fetch = ({
@@ -17,7 +16,7 @@ const fetch = ({
   }else{
     header["content-type"] = 'application/x-www-form-urlencoded';
   }
-  if (url.includes('api.do')) {   //根据自己项目的加密规则定义sign，放在data或者请求头header传递
+  if (url.includes('api.do')) {   //根据自己项目的加密规则定义sign，放在参数data里或者请求头header传递
     data.sign = md5('method' + data.method + "param" + data.param + "ecbao")
   }
   if(loading){
@@ -36,7 +35,7 @@ const fetch = ({
           wx.hideLoading()
         }
         resolve(res.data);
-        if(res.data.code !== null && res.data.code.toString() !== '0'){
+        if(res.data.code !== null && res.data.code.toString() !== '0'){     //这里正常请求code会返回'0'
           console.log(url,data);
         }
       },

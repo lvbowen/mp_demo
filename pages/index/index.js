@@ -18,6 +18,7 @@ Page({
     })
   },
   onLoad: function () {
+    console.log('onLoad')
     this.init();
     if (app.globalData.userInfo) {
       this.setData({
@@ -45,6 +46,12 @@ Page({
         }
       })
     }
+  },
+  onShow:function(){
+    console.log('onShow')
+  },
+  onReady:function(){
+      console.log('onReady')
   },
   getUserInfo: function(e) {
     console.log(e)
