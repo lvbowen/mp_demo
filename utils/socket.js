@@ -1,12 +1,11 @@
 const config = require('../config')
-const host = config.host.split('//')[1]; 
 
 class Socket {
   constructor(senderFansId, receiverFansId) {
     this.senderFansId = senderFansId
     this.pageUnload = false
     this.connected = false
-    this.wssHost = `wss://${host}/weipinChatWebSocket/${senderFansId}/${receiverFansId}`
+    this.wssHost = `${config.webSocketUrl}/${senderFansId}/${receiverFansId}`
     this.soTask = wx.connectSocket({
       url: this.wssHost,
       success(){

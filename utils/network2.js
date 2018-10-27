@@ -8,17 +8,29 @@ const fetch = ({
   loading = false,
   disableLint = false
 }) => {
+  let sign = '';
+  let token = wx.getStorageSync('token') || '';   //登录接口返回的token
   let header = {
-    "lversion": `${config.lversion}`  
+    "lversion": `${config.lversion}`,
+    "token": token,
   }
   if(method === 'get'){
     header["content-type"] = 'application/json';
   }else{
     header["content-type"] = 'application/x-www-form-urlencoded';
   }
-  if (url.includes('api.do')) {   //根据自己项目的加密规则定义sign，放在参数data里或者请求头header传递
-    data.sign = md5('method' + data.method + "param" + data.param + "ecbao")
+  //请求参数按一定规则md5加密
+  let newkey = Object.keys(data).sort();
+  let newObj = {};
+  for (let i = 0; i < newkey.length; i++) {   //遍历newkey数组
+    newObj[newkey[i]] = data[newkey[i]];    //向新创建的对象中按照排好的顺序依次增加键值对
   }
+  for (let key in newObj) {
+    sign += key + '=' + data[key];
+  }
+  sign = md5(sign + config.secretKey);
+  header.sign = sign;
+
   if(loading){
     wx.showLoading({
       title: '加载中',
