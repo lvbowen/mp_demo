@@ -1,6 +1,8 @@
 let config = require("../config.js")
 let md5 = require("./md5.min.js")
 
+const _requestCacheMap = {};
+
 const fetch = ({
   url,
   method = 'get',
@@ -8,6 +10,17 @@ const fetch = ({
   loading = false,
   disableLint = false
 }) => {
+  // 判断是否正在请求中，防止重复请求，或者请求过于频繁
+  const nameSpace = method + url + JSON.stringify(data);
+  let requestCache = _requestCacheMap[nameSpace];
+  if (!disableLint && typeof requestCache === 'object') {
+    if (requestCache.status == true) {
+      throw new Error(`请勿重复提交${nameSpace}`)
+    } else if (Date.now() - requestCache.timestamp < 3000) {
+      throw new Error(`请求过于频繁${nameSpace}`)
+    }
+  }
+
   let header = {
     "lversion": `${config.lversion}`  
   }
@@ -24,6 +37,13 @@ const fetch = ({
       title: '加载中',
     })
   }
+
+  //开始请求
+  _requestCacheMap[nameSpace] = {
+    status: true,
+    timestamp: Date.now()
+  }
+  console.log(_requestCacheMap, _requestCacheMap[nameSpace])
   return new Promise((resolve, reject) => {
     wx.request({
       url: `${config.host}${url}`,
@@ -31,6 +51,7 @@ const fetch = ({
       header: header,
       data: data,
       success: res => {
+        _requestCacheMap[nameSpace].status = false;
         if(loading){
           wx.hideLoading()
         }
@@ -40,6 +61,7 @@ const fetch = ({
         }
       },
       fail: (error) => {
+        _requestCacheMap[nameSpace].status = false;
         if (error.errMsg.includes('timeout')){
             wx.showToast({
               title: '请求超时，请重试',

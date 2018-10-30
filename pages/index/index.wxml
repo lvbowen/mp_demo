@@ -11,5 +11,6 @@
     <text class="user-motto">{{motto}}</text>
     <view>一个用于初始化原生小程序的模板</view>
   </view>
+  <button catchtap='getCompanyList'>发起请求</button>
 </view>
 <authUserInfo showAuth="{{showAuth}}"></authUserInfo>
