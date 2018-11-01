@@ -16,7 +16,7 @@ var config = {
   // 上传文件接口
   uploadFileUrl: `${host}/weixin/uploadImg.do`,
 
-  //WebSocket wss接口
+  //WebSocket wss地址
   webSocketUrl: `wss://${host.split('//')[1]}/weipinChatWebSocket`
 
 }

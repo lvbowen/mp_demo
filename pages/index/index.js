@@ -44,7 +44,7 @@ Page({
   },
   init(){
     
-    this.getCompanyList();
+    // this.getCompanyList();
     
   },
   getCompanyList(){
